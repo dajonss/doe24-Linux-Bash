@@ -1,0 +1,68 @@
+
+	Users and groups
+1. Create a user on the system for each member of the group
+	sudo useradd -m <namn>
+		? sudo useradd -m -p <lösenord> <namn> 
+
+2. Create a group. Each user created above should be a member of the group.
+
+	sudo groupadd <gruppnamn>
+	sudo usermod -aG <gruppnamn> <namn>
+	
+		? sudo groupadd -U  
+
+3. Set a default password for each user. Ask the user running the script for the password to
+set. Make sure each user has to change password after the ﬁrst login.
+	sudo passwd -e <name>
+		
+
+
+4. Create a shared folder under /opt/<group-name>. It should be owned by the shared group
+created in point 2. Make sure newly created ﬁles inside the shared folder are automatically
+owned by the group.
+
+	sudo mkdir /opt/<gruppnamn>
+	sudo chown :<gruppnamn> /opt/<gruppnamn>
+
+5. Make sure all users created previously can run sudo commands without the need to write
+their password.
+	etc/sudoers.bak
+		Ändra 
+		# User privilige specifications
+		<namn> ALL=(ALL:ALL) NOPASSWD: ALL
+
+
+	System setup
+1. Make sure all packages are updated to the latest version available.
+	sudo apt update
+	sudo apt upgrade -y
+	
+
+2. Make sure the ssh server is installed and running.
+	sudo apt install openssh-server
+
+3. Conﬁgure the ssh server to:
+(a) Run on a non-default port
+	/etc/ssh/ssh_config 
+		# Port 22 <--- Ändra till något annat
+		
+(b) Only accept log-in via pubkey
+	/etc/ssh/ssh_config
+		# PasswordAuthentication no
+		
+(c) Only allow the users created previously to login via ssh
+	/etc/ssh/ssh_config
+		Lägg till:
+		AllowUsers <namn> <namn> <namn> ...
+
+4. Make sure ﬁrewalld is installed and running. Block all incoming connections except for
+the SSH port. Allow all outgoing connections.
+
+
+5. Make sure the latest available version of docker and docker compose are installed on the
+system.
+	Se Dockers hemsida för CLI-kommandot, Giacomo hintade om det.
+
+6. Make sure all users created previously can run docker cli commands without needing to
+use sudo.
+	sudo usermod -aG docker <namn>

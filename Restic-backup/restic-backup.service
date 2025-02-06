@@ -1,0 +1,14 @@
+[Unit]
+Description=Restic Backup Service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=dajonss
+Type=oneshot
+Environment=RESTIC_PASSWORD="test"
+ExecStart=/usr/bin/restic -r sftp:ubuntu-labb:/home/dajonss/new-backup backup /home/dajonss/backup_from_fedora
+
+[Install]
+WantedBy=multi-user.target
+

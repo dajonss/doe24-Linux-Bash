@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Restic Backup 5 Minutes After Boot
+
+[Timer]
+OnBootSec=5min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+
